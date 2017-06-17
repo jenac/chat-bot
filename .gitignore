@@ -6,3 +6,5 @@
 /data/voice/*.mp3
 /data/video/*.mp4
 /data/emotion/*.gif
+
+*.log

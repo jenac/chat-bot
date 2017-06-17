@@ -3,6 +3,23 @@ const qrcode = require('qrcode-terminal');
 const fs = require('fs');
 const request = require('request');
 const lastKnowGoodPath = './data/lkg.json';
+const winston = require('winston');
+require('winston-daily-rotate-file');
+
+var transport = new winston.transports.DailyRotateFile({
+    filename: './bot.log',
+    datePattern: 'yyyy-MM-dd.',
+    prepend: true,
+    level: process.env.ENV === 'development' ? 'debug' : 'info'
+  });
+
+var logger = new (winston.Logger)({
+    transports: [
+        new (winston.transports.Console)(),
+        transport
+    ]
+});
+
 let bot;
 try {
     bot = new Wechat(require(lastKnowGoodPath));
@@ -19,32 +36,32 @@ if (bot.PROP.uin) {
 
 bot.on('uuid', uuid => {
     qrcode.generate('https://login.weixin.qq.com/l/' + uuid, { small: true });
-    console.log('QR code link：', 'https://login.weixin.qq.com/qrcode/' + uuid)
+    logger.info('QR code link：', 'https://login.weixin.qq.com/qrcode/' + uuid)
 })
 
 bot.on('user-avatar', avatar => {
-    console.log('User avatar Data URL：', avatar);
+    logger.info('User avatar Data URL：', avatar);
 })
 
 bot.on('login', () => {
-    console.log('login successful');
+    logger.info('login successful');
     //save last known good
     fs.writeFileSync(lastKnowGoodPath, JSON.stringify(bot.botData));
 })
 
 bot.on('logout', () => {
-    console.log('logout successful');
+    logger.info('logout successful');
     //clear last known good
     fs.unlinkSync(lastKnowGoodPath);
 })
 
 bot.on('contacts-updated', contacts => {
     //console.log(contacts);
-    console.log('total: ', Object.keys(bot.contacts).length);
+    logger.info('total: ', Object.keys(bot.contacts).length);
 })
 
 bot.on('error', err => {
-    console.error('error：', err);
+    logger.error('error：', err);
 })
 
 bot.on('message', msg => {
@@ -60,7 +77,7 @@ bot.on('message', msg => {
         originalContent: msg.OriginalContent,
         isSendBySelf: msg.isSendBySelf
     };
-    
+
     switch (msg.MsgType) {
         case bot.CONF.MSGTYPE_TEXT:
             persist(persistMessage);
@@ -122,5 +139,5 @@ bot.on('message', msg => {
 })
 
 function persist(message) {
-    console.log(message);
+    logger.info(message);
 }

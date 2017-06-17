@@ -1,0 +1,8 @@
+# dependencies
+/node_modules
+
+/data/lkg.json
+/data/image/*.jpg
+/data/voice/*.mp3
+/data/video/*.mp4
+/data/emotion/*.gif

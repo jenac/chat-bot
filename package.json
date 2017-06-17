@@ -1,0 +1,17 @@
+{
+  "name": "chat-bot",
+  "version": "1.0.0",
+  "description": "a chat bot",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lihe Chen",
+  "license": "ISC",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "qrcode-terminal": "^0.11.0",
+    "request": "^2.81.0",
+    "wechat4u": "^0.7.4"
+  }
+}

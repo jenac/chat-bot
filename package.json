@@ -13,6 +13,7 @@
   "dependencies": {
     "amqplib": "^0.5.1",
     "fs": "0.0.1-security",
+    "node-rest-client": "^3.1.0",
     "qrcode-terminal": "^0.11.0",
     "request": "^2.81.0",
     "wechat4u": "^0.7.5",

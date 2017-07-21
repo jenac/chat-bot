@@ -3,6 +3,7 @@
 /build
 package-lock.json
 
+/deploy/data/db
 /data/lkg.json
 /data/image/*.jpg
 /data/voice/*.mp3

@@ -1,11 +1,11 @@
-import restHeart from './rest-heart';
+import restHeartConfig from './rest-heart-config';
 const Client = require('node-rest-client').Client;
 
-class RestClient {
+class RestHeartClient {
     constructor() {
-        let options_auth = { user: restHeart.userId, password: restHeart.password };
+        let options_auth = { user: restHeartConfig.userId, password: restHeartConfig.password };
         this.client = new Client(options_auth);
-        this.messageUrl = `http://${restHeart.server}:${restHeart.port}/${restHeart.database}/messages`;
+        this.messageUrl = `http://${restHeartConfig.server}:${restHeartConfig.port}/${restHeartConfig.database}/messages`;
     }
 
     upsertMessage(message) {
@@ -18,6 +18,10 @@ class RestClient {
             console.log(data);
         });
     }
+
+    initializeDatabase() {
+        
+    }
 }
 
-export let restClient = new RestClient();
+export let restHeartClient = new RestHeartClient();

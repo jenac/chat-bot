@@ -1,5 +1,5 @@
 import { logger } from './logger';
-import { restClient } from './rest-client';
+import { restHeartClient } from './rest-heart-client';
 
 const Wechat = require('wechat4u');
 const qrcode = require('qrcode-terminal');
@@ -113,6 +113,6 @@ bot.on('message', msg => {
 })
 
 function persist(message) {
-    restClient.upsertMessage(message);
+    restHeartClient.upsertMessage(message);
     logger.instance.info(message);
 }

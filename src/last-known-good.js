@@ -1,15 +1,19 @@
 const fs = require('fs');
-const lastKnownGoodPath = './data/lkg.json';
-const lkgData = require(lastKnownGoodPath);
+const lastKnownGoodPath = '/home/lihe/Projects/chat-bot/data/lkg.json';
 
 class LastKnownGood {
     constructor() {
-        
+        this.lkgData = null;
     }
 
     loadData() {
         console.log('reading');
-        return lkgData
+        try {
+            this.lkgData = require(lastKnownGoodPath);
+        } catch(e) {
+            this.lkgData = null;
+        }
+        return this.lkgData;
     }
 
     saveData(data) {

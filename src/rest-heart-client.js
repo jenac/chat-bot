@@ -1,12 +1,17 @@
-import restHeartConfig from './rest-heart-config';
+import { botConfig } from './bot-config';
 const Client = require('node-rest-client').Client;
 
 class RestHeartClient {
     constructor() {
-        let options_auth = { user: restHeartConfig.userId, password: restHeartConfig.password };
+        let options_auth = { user: botConfig.restHeartUserId, password: botConfig.restHeartPassword };
         this.client = new Client(options_auth);
-        this.messageUrl = `http://${restHeartConfig.server}:${restHeartConfig.port}/${restHeartConfig.database}/messages`;
+        this.handleResponse = function (data, response) {
+            console.log('kkk');
+            console.log(data);
+            console.log(response);
+        }
     }
+
 
     upsertMessage(message) {
         message.id = message.MsgId;
@@ -14,13 +19,7 @@ class RestHeartClient {
             data: message,
             headers: { "Content-Type": "application/json" }
         };
-        this.client.put(`${this.messageUrl}/${message.MsgId}`, args, function (data, response) {
-            console.log(data);
-        });
-    }
-
-    initializeDatabase() {
-        
+        this.client.put(`${botConfig.restHeartUrl}/messages/${message.MsgId}`, args, this.handleResponse);
     }
 }
 

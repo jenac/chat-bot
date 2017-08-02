@@ -11,3 +11,4 @@ package-lock.json
 /data/emotion/*.gif
 
 *.log
+dummy.json

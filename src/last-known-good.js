@@ -18,4 +18,9 @@ export class LastKnownGood {
     saveData(data) {
         fs.writeFileSync(this.lkgFile, JSON.stringify(data));
     }
+
+    cleanup() {
+        let fs = require('fs');
+        fs.unlinkSync(this.lkgFile);
+    }
 }

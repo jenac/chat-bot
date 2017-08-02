@@ -1,15 +1,16 @@
 import { logger } from './logger';
-import { restHeartClient } from './rest-heart-client';
-
+import { botConfig } from './bot-config';
+import { LastKnownGood } from './last-known-good';
 const Wechat = require('wechat4u');
 const qrcode = require('qrcode-terminal');
 const fs = require('fs');
 //const request = require('request');
-const lastKnowGoodPath = './data/lkg.json';
+
+let lastKnownGood = new LastKnownGood(botConfig.lkgFile);
 
 let bot;
 try {
-    bot = new Wechat(require(lastKnowGoodPath));
+    bot = new Wechat(lastKnownGood.loadData());
 } catch (e) {
     bot = new Wechat();
 }
@@ -33,13 +34,13 @@ bot.on('user-avatar', avatar => {
 bot.on('login', () => {
     logger.instance.info('login successful');
     //save last known good
-    fs.writeFileSync(lastKnowGoodPath, JSON.stringify(bot.botData));
+    lastKnownGood.saveData(bot.botData);
 })
 
 bot.on('logout', () => {
     logger.instance.info('logout successful');
     //clear last known good
-    fs.unlinkSync(lastKnowGoodPath);
+    lastKnownGood.cleanup();
 })
 
 bot.on('contacts-updated', contacts => {

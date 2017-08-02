@@ -1,25 +1,21 @@
 const fs = require('fs');
-const lastKnownGoodPath = '/home/lihe/Projects/chat-bot/data/lkg.json';
 
-class LastKnownGood {
-    constructor() {
-        this.lkgData = null;
+export class LastKnownGood {
+    constructor(lkgFile) {
+        this.lkgFile = lkgFile;
     }
 
     loadData() {
-        console.log('reading');
         try {
-            this.lkgData = require(lastKnownGoodPath);
+            let fs = require('fs');
+            let data = JSON.parse(fs.readFileSync(this.lkgFile, 'utf8'));
+            return data;
         } catch(e) {
-            this.lkgData = null;
+            return null;
         }
-        return this.lkgData;
     }
 
     saveData(data) {
-        console.log('writing');
-        fs.writeFileSync(lastKnownGoodPath, JSON.stringify(data));
+        fs.writeFileSync(this.lkgFile, JSON.stringify(data));
     }
 }
-
-export let lastKnownGood = new LastKnownGood();

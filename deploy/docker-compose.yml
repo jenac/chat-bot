@@ -1,16 +1,6 @@
 version: '2'
 
 services:
-   restheart:
-      image: softinstigate/restheart:3.1.1
-      container_name: restheart
-      depends_on:
-            - mongodb
-      ports:
-            - "8080:8080"
-      volumes:
-            - "./data/restheart:/opt/restheart/etc"
-
    mongodb:
       image: mongo:3.4.4
       container_name: mongo

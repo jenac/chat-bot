@@ -1,8 +1,21 @@
 import { logger } from './logger';
 import { botConfig } from './bot-config';
 import { LastKnownGood } from './last-known-good';
+import { MongoRepository } from './mongo-repository';
 const Wechat = require('wechat4u');
 const qrcode = require('qrcode-terminal');
+
+//init database
+var MongoClient = require('mongodb').MongoClient;
+let mongoRepository;
+MongoClient.connect(botConfig.dbUrl, function (err, db) {
+    if (err) {
+        throw err;
+    }
+
+    mongoRepository = new MongoRepository(db);
+});
+
 const fs = require('fs');
 //const request = require('request');
 
@@ -113,7 +126,11 @@ bot.on('message', msg => {
     }
 })
 
+
+
+
 function persist(message) {
-    restHeartClient.upsertMessage(message);
+    message._id = message.MsgId;
+    mongoRepository.upsertMessage(message);
     logger.instance.info(message);
 }

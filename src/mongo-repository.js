@@ -2,6 +2,7 @@ export class MongoRepository {
     constructor(mongo) {
         this.messageCollection = mongo.collection('messages');
         this.contactCollection = mongo.collection('contacts');
+        this.groupCollection = mongo.collection('groups');
     }
 
     upsertMessage(message) {
@@ -16,6 +17,11 @@ export class MongoRepository {
         this.contactCollection.save(contact, (err, res) => {
             if (err) throw err;
         });
+    }
+
+    upsertGroup(group, callback) {
+        group._id = group.UserName;
+        this.groupCollection.save(group, callback);
     }
 }
 

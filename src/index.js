@@ -57,8 +57,17 @@ bot.on('logout', () => {
 })
 
 bot.on('contacts-updated', contacts => {
-    //console.log(contacts);
-    logger.instance.info('total: ', Object.keys(bot.contacts).length);
+    for(let c of contacts) {
+        if (c.UserName.startsWith('@@')) {
+            mongoRepository.upsertGroup(c, (err, res) => {
+                if (err) logger.instance.error(err);
+            });
+        } else {
+            mongoRepository.upsertContact(c, (err, res) => {
+                if (err) logger.instance.error(err);
+            });
+        }
+    }
 })
 
 bot.on('error', err => {

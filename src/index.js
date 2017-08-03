@@ -71,7 +71,7 @@ bot.on('contacts-updated', contacts => {
 })
 
 bot.on('error', err => {
-    logger.instance.error('errorï¼š', err);
+    logger.instance.error('error', err);
 })
 
 bot.on('message', msg => {

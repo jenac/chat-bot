@@ -32,6 +32,7 @@ describe('message sender', () => {
         };
         let messageSender = new MessageSender(server, bot);
 
+
         chai.request('http://localhost:3000')
             .post('/send')
             .set('content-type', 'application/json')

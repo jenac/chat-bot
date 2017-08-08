@@ -10,7 +10,6 @@ describe('Last Know Good', () => {
         l1.saveData({foo: "bar"});
 
         let d = l1.loadData();
-        console.log(d);
         assert(l1.loadData().foo == "bar");
 
         l1.cleanup();

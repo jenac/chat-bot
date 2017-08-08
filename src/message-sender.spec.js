@@ -15,38 +15,36 @@ server.use(restify.plugins.acceptParser(server.acceptable));
 server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
 
-
 server.listen(3000, function () {
     console.log('%s listening at %s', server.name, server.url);
 });
 
-
 describe('message sender', () => {
     it('post to /send', (done) => {
-        let called = false;
+        let botSendCalled = false;
+        let messageTo = "shahala";
+        let messageData = "text message here";
         var bot = {
-            sendMessage: function () {
-                called = true;
-                console.log('asasdfasf');
+            sendMessage: function (data, to) {
+                botSendCalled = true;
+                assert(to == messageTo);
+                assert(data == messageData);
             }
         };
         let messageSender = new MessageSender(server, bot);
 
-
         chai.request('http://localhost:3000')
             .post('/send')
             .set('content-type', 'application/json')
-            .send({ id: 123, name: 'what?' })
+            .send({ to: messageTo, data: messageData})
             .end((err, res) => {
                 assert(err == null);
                 assert(res.status == 200);
-                assert(called);
-                console.log(res.body);
+                assert(botSendCalled);
+                assert(res.body != null);
                 done();
             });
     });
-
-
 });
 
 

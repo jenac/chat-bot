@@ -8,11 +8,8 @@ const qrcode = require('qrcode-terminal');
 //init database
 var MongoClient = require('mongodb').MongoClient;
 let mongoRepository;
-MongoClient.connect(botConfig.dbUrl, function (err, db) {
-    if (err) {
-        throw err;
-    }
-
+MongoClient.connect(botConfig.dbUrl, (err, db) => {
+    if (err) { throw err; }
     mongoRepository = new MongoRepository(db);
 });
 

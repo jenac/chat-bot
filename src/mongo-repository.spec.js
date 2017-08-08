@@ -8,10 +8,8 @@ const assert = chai.assert;
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/chat-bot-test";
 
-MongoClient.connect(url, function (err, db) {
-    if (err) {
-        throw err;
-    }
+MongoClient.connect(url, (err, db) => {
+    if (err) { throw err; }
 
     describe('mongo repository', () => {
         let mongoRepository = new MongoRepository(db);
@@ -72,7 +70,7 @@ MongoClient.connect(url, function (err, db) {
 
             mongoRepository.upsertMessage(message);
 
-            db.collection('messages').findOne({ _id: message.MsgId }, function (err, data) {
+            db.collection('messages').findOne({ _id: message.MsgId }, (err, data) => {
                 assert(err == null);
                 assert(data != null);
                 done();
@@ -122,7 +120,7 @@ MongoClient.connect(url, function (err, db) {
                 "isSelf": false
             };
             mongoRepository.upsertContact(contact);
-            db.collection('contacts').findOne({ _id: contact.UserName }, function (err, data) {
+            db.collection('contacts').findOne({ _id: contact.UserName }, (err, data) => {
                 assert(err == null);
                 assert(data != null);
                 done();
@@ -225,7 +223,7 @@ MongoClient.connect(url, function (err, db) {
             };
 
             mongoRepository.upsertGroup(group, (err, res) => {
-            db.collection('groups').findOne({ _id: group.UserName }, function (err, data) {
+            db.collection('groups').findOne({ _id: group.UserName }, (err, data) => {
                 assert(err == null);
                 assert(data != null);
                 done();

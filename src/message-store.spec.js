@@ -10,14 +10,25 @@ let mockFolder = './tmp';
 let mockId = 'mocked-id';
 let mockBot = {
     CONF: {
-        MSGTYPE_IMAGE: 1,
-        MSGTYPE_TEXT: 2,
+        MSGTYPE_IMAGE: 101,
+        MSGTYPE_TEXT: 201,
+        MSGTYPE_VOICE: 301,
+        MSGTYPE_EMOTICON: 401,
     },
     getMsgImg: (id) => {
         assert(id == mockId);
         return Promise.resolve({
-            then: function (onFulfill, onReject) { onFulfill({ data: 'fulfilled!' }); }
+            then: function (onFulfill, onReject) { onFulfill({ data: 'image message!' }); }
         });
+    },
+    getVoice: (id) => {
+        assert(id == mockId);
+        return Promise.resolve({
+            then: function (onFulfill, onReject) { onFulfill({ data: 'voice message!' }); }
+        });
+    },
+    emit: (name, err) => {
+        throw err;
     }
 };
 
@@ -36,6 +47,8 @@ let fse = require('fs-extra');
 describe('message store', () => {
     before(() => {
         fse.ensureDirSync(`${mockFolder}/image`);
+        fse.ensureDirSync(`${mockFolder}/voice`);
+        fse.ensureDirSync(`${mockFolder}/emotion`);
     });
 
     after(() => {
@@ -72,11 +85,31 @@ describe('message store', () => {
         done();
     });
 
-    xit('store voice message', (done) => {
+    it('store voice message', (done) => {
+        let message = {
+            MsgId: mockId,
+            MsgType: mockBot.CONF.MSGTYPE_VOICE
+        };
+        
+        let messageStore = new MessageStore(mockRepository, mockFolder, mockBot);
+        messageStore.persist(message);
+        assert(upsertCalled);
+
+        assert(fse.pathExists(`${mockFolder}/voice/${mockId}.mp3`));
         done();
     });
 
-    xit('store emotion message', (done) => {
+    it('store emotion message', (done) => {
+        let message = {
+            MsgId: mockId,
+            MsgType: mockBot.CONF.MSGTYPE_EMOTICON
+        };
+        
+        let messageStore = new MessageStore(mockRepository, mockFolder, mockBot);
+        messageStore.persist(message);
+        assert(upsertCalled);
+
+        assert(fse.pathExists(`${mockFolder}/emotion/${mockId}.gif`));
         done();
     });
 

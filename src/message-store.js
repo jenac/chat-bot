@@ -20,23 +20,20 @@ export class MessageStore {
                     this.bot.emit('error', err);
                 })
                 break;
-        //     case bot.CONF.MSGTYPE_VOICE:
-        //         persist(msg);
-        //         bot.getVoice(msg.MsgId).then(res => {
-        //             fs.writeFileSync(`./data/voice/${msg.MsgId}.mp3`, res.data)
-        //         }).catch(err => {
-        //             bot.emit('error', err)
-        //         })
-        //         break;
-        //     case bot.CONF.MSGTYPE_EMOTICON:
-        //         persist(msg);
-        //         bot.getMsgImg(msg.MsgId).then(res => {
-        //             console.log(res);
-        //             fs.writeFileSync(`./data/emotion/${msg.MsgId}.gif`, res.data)
-        //         }).catch(err => {
-        //             bot.emit('error', err)
-        //         })
-        //         break
+            case this.bot.CONF.MSGTYPE_VOICE:
+                this.bot.getVoice(message.MsgId).then(res => {
+                    this.fs.writeFileSync(`${this.folder}/voice/${message.MsgId}.mp3`, res.data)
+                }).catch(err => {
+                    this.bot.emit('error', err)
+                })
+                break;
+            case this.bot.CONF.MSGTYPE_EMOTICON:
+                this.bot.getMsgImg(message.MsgId).then(res => {
+                    this.fs.writeFileSync(`${this.folder}/emotion/${message.MsgId}.gif`, res.data)
+                }).catch(err => {
+                    this.bot.emit('error', err)
+                })
+                break
         //     case bot.CONF.MSGTYPE_VIDEO:
         //     case bot.CONF.MSGTYPE_MICROVIDEO:
         //         persist(msg);

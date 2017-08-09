@@ -14,6 +14,8 @@ let mockBot = {
         MSGTYPE_TEXT: 201,
         MSGTYPE_VOICE: 301,
         MSGTYPE_EMOTICON: 401,
+        MSGTYPE_VIDEO: 501,
+        MSGTYPE_MICROVIDEO: 502
     },
     getMsgImg: (id) => {
         assert(id == mockId);
@@ -27,6 +29,12 @@ let mockBot = {
             then: function (onFulfill, onReject) { onFulfill({ data: 'voice message!' }); }
         });
     },
+    getVideo: (id) => {
+        assert(id != null);
+        return Promise.resolve({
+            then: function (onFulfill, onReject) { onFulfill({ data: 'video message!' }); }
+        });
+    },
     emit: (name, err) => {
         throw err;
     }
@@ -36,7 +44,7 @@ let upsertCalled = false;
 let mockRepository = {
     upsertMessage: (message) => {
         assert(message != null);
-        assert(message._id == mockId);
+        assert(message._id == message.MsgId);
         upsertCalled = true;
     }
 };
@@ -49,11 +57,11 @@ describe('message store', () => {
         fse.ensureDirSync(`${mockFolder}/image`);
         fse.ensureDirSync(`${mockFolder}/voice`);
         fse.ensureDirSync(`${mockFolder}/emotion`);
+        fse.ensureDirSync(`${mockFolder}/video`);
     });
 
     after(() => {
         fse.removeSync(mockFolder);
-        console.log('tear down');
     })
 
     beforeEach(() => {
@@ -113,7 +121,31 @@ describe('message store', () => {
         done();
     });
 
-    xit('store video message', (done) => {
+    it('store video message', (done) => {
+        let message = {
+            MsgId: mockId,
+            MsgType: mockBot.CONF.MSGTYPE_VIDEO
+        };
+        
+        let messageStore = new MessageStore(mockRepository, mockFolder, mockBot);
+        messageStore.persist(message);
+        assert(upsertCalled);
+
+        assert(fse.pathExists(`${mockFolder}/video/${mockId}.mp4`));
+        done();
+    });
+    
+    it('store micro video message', (done) => {
+        let message = {
+            MsgId: mockId + '-micro',
+            MsgType: mockBot.CONF.MSGTYPE_MICROVIDEO
+        };
+        
+        let messageStore = new MessageStore(mockRepository, mockFolder, mockBot);
+        messageStore.persist(message);
+        assert(upsertCalled);
+
+        assert(fse.pathExists(`${mockFolder}/video/${mockId}-micro.mp4`));
         done();
     });
 

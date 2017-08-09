@@ -34,16 +34,14 @@ export class MessageStore {
                     this.bot.emit('error', err)
                 })
                 break
-        //     case bot.CONF.MSGTYPE_VIDEO:
-        //     case bot.CONF.MSGTYPE_MICROVIDEO:
-        //         persist(msg);
-        //         bot.getVideo(msg.MsgId).then(res => {
-        //             console.log(res);
-        //             fs.writeFileSync(`./data/video/${msg.MsgId}.mp4`, res.data)
-        //         }).catch(err => {
-        //             bot.emit('error', err)
-        //         })
-        //         break
+            case this.bot.CONF.MSGTYPE_VIDEO:
+            case this.bot.CONF.MSGTYPE_MICROVIDEO:
+                this.bot.getVideo(message.MsgId).then(res => {
+                    this.fs.writeFileSync(`${this.folder}/video/${message.MsgId}.mp4`, res.data)
+                }).catch(err => {
+                    this.bot.emit('error', err)
+                })
+                break
         //     case bot.CONF.MSGTYPE_APP:
         //         //do not handle for now.
         //         // if (msg.AppMsgType == 6) {

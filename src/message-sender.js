@@ -8,7 +8,7 @@ export class MessageSender {
 
     send(req, res, next) {
         var message = req.body;
-        this.bot.sendMessage(message.data, message.to);
+        this.bot.sendMsg(message.data, message.to);
         res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
         res.end(JSON.stringify(message));
         return next();

@@ -25,7 +25,7 @@ describe('message sender', () => {
         let messageTo = "shahala";
         let messageData = "text message here";
         var bot = {
-            sendMessage: (data, to) => {
+            sendMsg: (data, to) => {
                 botSendCalled = true;
                 assert(to == messageTo);
                 assert(data == messageData);

@@ -74,5 +74,6 @@ bot.on('error', err => {
 
 bot.on('message', msg => {
     messageStore.persist(msg);
+    logger.instance.info(msg);
 })
 

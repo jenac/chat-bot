@@ -2,26 +2,36 @@ import { logger } from './logger';
 import { botConfig } from './bot-config';
 import { LastKnownGood } from './last-known-good';
 import { MongoRepository } from './mongo-repository';
+import { MessageStore } from './message-store';
+import { MessageSender } from './message-sender'
 const Wechat = require('wechat4u');
 const qrcode = require('qrcode-terminal');
 
+let messageStore;
 //init database
 var MongoClient = require('mongodb').MongoClient;
 let mongoRepository;
-MongoClient.connect(botConfig.dbUrl, function (err, db) {
-    if (err) {
-        throw err;
-    }
-
+let bot;
+MongoClient.connect(botConfig.dbUrl, (err, db) => {
+    if (err) { throw err; }
     mongoRepository = new MongoRepository(db);
+    messageStore = new MessageStore(mongoRepository, './data', bot);
 });
 
-const fs = require('fs');
-//const request = require('request');
+//init restify
+const restify = require('restify');
+var server = restify.createServer();
+server.use(restify.plugins.acceptParser(server.acceptable));
+server.use(restify.plugins.queryParser());
+server.use(restify.plugins.bodyParser());
+
+server.listen(botConfig.listen, () => {
+    console.log('%s listening at %s', server.name, server.url);
+});
 
 let lastKnownGood = new LastKnownGood(botConfig.lkgFile);
 
-let bot;
+
 try {
     bot = new Wechat(lastKnownGood.loadData());
 } catch (e) {
@@ -34,6 +44,7 @@ if (bot.PROP.uin) {
 } else {
     bot.start();
 }
+let messageSender = new MessageSender(server, bot);
 
 bot.on('uuid', uuid => {
     qrcode.generate('https://login.weixin.qq.com/l/' + uuid, { small: true });
@@ -75,71 +86,7 @@ bot.on('error', err => {
 })
 
 bot.on('message', msg => {
-    switch (msg.MsgType) {
-        case bot.CONF.MSGTYPE_TEXT:
-            persist(msg);
-            break;
-        case bot.CONF.MSGTYPE_IMAGE:
-            persist(msg);
-            bot.getMsgImg(msg.MsgId).then(res => {
-                fs.writeFileSync(`./data/image/${msg.MsgId}.jpg`, res.data);
-            }).catch(err => {
-                bot.emit('error', err);
-            })
-            break;
-        case bot.CONF.MSGTYPE_VOICE:
-            persist(msg);
-            bot.getVoice(msg.MsgId).then(res => {
-                fs.writeFileSync(`./data/voice/${msg.MsgId}.mp3`, res.data)
-            }).catch(err => {
-                bot.emit('error', err)
-            })
-            break;
-        case bot.CONF.MSGTYPE_EMOTICON:
-            persist(msg);
-            bot.getMsgImg(msg.MsgId).then(res => {
-                console.log(res);
-                fs.writeFileSync(`./data/emotion/${msg.MsgId}.gif`, res.data)
-            }).catch(err => {
-                bot.emit('error', err)
-            })
-            break
-        case bot.CONF.MSGTYPE_VIDEO:
-        case bot.CONF.MSGTYPE_MICROVIDEO:
-            persist(msg);
-            bot.getVideo(msg.MsgId).then(res => {
-                console.log(res);
-                fs.writeFileSync(`./data/video/${msg.MsgId}.mp4`, res.data)
-            }).catch(err => {
-                bot.emit('error', err)
-            })
-            break
-        case bot.CONF.MSGTYPE_APP:
-            //do not handle for now.
-            // if (msg.AppMsgType == 6) {
-            //     /**
-            //      * æ–‡ä»¶æ¶ˆæ¯
-            //      */
-            //     console.log('æ–‡ä»¶æ¶ˆæ¯ï¼Œä¿å­˜åˆ°æœ¬åœ°')
-            //     bot.getDoc(msg.FromUserName, msg.MediaId, msg.FileName).then(res => {
-            //         fs.writeFileSync(`./media/${msg.FileName}`, res.data)
-            //         console.log(res.type);
-            //     }).catch(err => {
-            //         bot.emit('error', err)
-            //     })
-            // }
-            break
-        default:
-            //should log into db
-            break
-    }
+    messageStore.persist(msg);
+    logger.instance.info(msg);
 })
 
-
-
-
-function persist(message) {
-    message._id = message.MsgId;
-    mongoRepository.upsertMessage(message);
-    logger.instance.info(message);
-}

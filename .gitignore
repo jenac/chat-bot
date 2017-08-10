@@ -12,3 +12,4 @@ package-lock.json
 
 *.log
 dummy.json
+tmp

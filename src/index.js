@@ -15,7 +15,7 @@ let bot;
 MongoClient.connect(botConfig.dbUrl, (err, db) => {
     if (err) { throw err; }
     mongoRepository = new MongoRepository(db);
-    messageStore = new MessageStore(mongoRepository, './data', bot);
+    messageStore = new MessageStore(mongoRepository, botConfig.dataFolder, bot);
 });
 
 //init restify

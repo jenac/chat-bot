@@ -8,11 +8,5 @@ export let botConfig = JSON.parse(fs.readFileSync(process.env.BOT_CONFIG_FILE), 
     "lkgFile": "C:\\Projects\\chat-bot\\data\\lkg.json",
     "listen": 6688,
     "dataFolder": ".\\data",
-    "email" : {
-        "user": "****",
-        "password": "****", 
-        "host": "smtp.gmail.com", 
-        "ssl": true
-    }
 }
 */

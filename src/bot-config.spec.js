@@ -8,6 +8,5 @@ describe('bot config', () => {
         assert(botConfig.dbUrl != null && botConfig.dbUrl != undefined);
         assert(botConfig != null && botConfig.listen != undefined);
         assert(botConfig != null && botConfig.dataFolder != undefined);
-        assert(botConfig != null && botConfig.email != undefined);
     })
 })

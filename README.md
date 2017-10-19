@@ -19,7 +19,7 @@ Set Environment Variable BOT_CONFIG_FILE, point to a configuration json file lik
     "dbUrl": "mongodb://localhost:27017/chat-bot",
     "lkgFile": "C:\\Projects\\chat-bot\\data\\lkg.json",
     "listen": 6688,
-    "dataFolder": ".\\data",
+    "dataFolder": ".\\data"
 }
 
 ```

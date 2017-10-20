@@ -12,7 +12,7 @@ let messageStore;
 var MongoClient = require('mongodb').MongoClient;
 let mongoRepository;
 let bot;
-let mongoUrl = `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@${botConfig.mongoServer}:27017/admin?database=${botConfig.mongoDatabase}`;
+let mongoUrl = `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@${botConfig.mongoServer}:27017/${botConfig.mongoDatabase}`;
 console.log(mongoUrl);
 MongoClient.connect(mongoUrl, (err, db) => {
     if (err) { throw err; }

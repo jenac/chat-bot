@@ -23,3 +23,10 @@ Set Environment Variable BOT_CONFIG_FILE, point to a configuration json file lik
 }
 
 ```
+
+## Setup Mongo
+
+Set Environment Variables for:
+- MONGO_INITDB_ROOT_USERNAME
+- MONGO_INITDB_ROOT_PASSWORD
+- MONGO_INITDB_DATABASE

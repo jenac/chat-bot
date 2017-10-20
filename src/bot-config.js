@@ -4,9 +4,9 @@ export let botConfig = JSON.parse(fs.readFileSync(process.env.BOT_CONFIG_FILE), 
 //example:
 /*
 {
-    "dbUrl": "mongodb://localhost:27017/chat-bot",
-    "lkgFile": "C:\\Projects\\chat-bot\\data\\lkg.json",
+    "mongoServer": "localhost",
+    "lkgFile": "./data/lkg.json",
     "listen": 6688,
-    "dataFolder": ".\\data"
+    "dataFolder": "./data"
 }
 */

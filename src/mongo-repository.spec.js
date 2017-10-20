@@ -6,7 +6,7 @@ const expect = chai.expect;
 const assert = chai.assert;
 
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/chat-bot-test";
+var url = `mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME}:${process.env.MONGO_INITDB_ROOT_PASSWORD}@localhost:27017/chat-bot-test`;
 
 MongoClient.connect(url, (err, db) => {
     if (err) { throw err; }

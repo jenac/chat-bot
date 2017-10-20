@@ -16,12 +16,11 @@ Set Environment Variable BOT_CONFIG_FILE, point to a configuration json file lik
 
 ```javascript
 {
-    "dbUrl": "mongodb://localhost:27017/chat-bot",
-    "lkgFile": "C:\\Projects\\chat-bot\\data\\lkg.json",
+    "mongoServer": "localhost",
+    "lkgFile": "./data/lkg.json",
     "listen": 6688,
-    "dataFolder": ".\\data"
+    "dataFolder": "./data"
 }
-
 ```
 
 ## Setup Mongo

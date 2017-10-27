@@ -1,3 +1,4 @@
+//todo passin callback
 export class MongoRepository {
     constructor(mongo) {
         this.messageCollection = mongo.collection('messages');

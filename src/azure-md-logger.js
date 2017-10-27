@@ -5,18 +5,13 @@ export class AzureMdLogger {
          this.restClient = restClient;
      }
  
-     log(message) {
+     log(message, callback) {
          let args = {
              data: message,
              headers: { "Content-Type": "application/json" }
          };
         
-        this.restClient.post(this.azureApi, args, (data, response) => {
-            // parsed response body as js object 
-            console.log(data);
-            // raw response 
-            console.log(response);
-        });
+        this.restClient.post(this.azureApi, args, callback);
      }
 }
  

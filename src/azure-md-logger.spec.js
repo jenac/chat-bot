@@ -45,8 +45,11 @@ describe('azure markdown logger', () => {
             "OriginalContent" : "@e93e3adc1a75d5f7eb5b030f6223691bb89c712efc8e8576d626912d12d3fda5:<br/>星期天打一会儿？"
         };
         
-        azureMdLogger.log(message);
-        done();
+        azureMdLogger.log(message, (data, response) => {
+            console.log(data);
+            done();
+        });
+        
     });
 });
 

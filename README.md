@@ -19,7 +19,9 @@ Set Environment Variable BOT_CONFIG_FILE, point to a configuration json file lik
     "mongoServer": "localhost",
     "lkgFile": "./data/lkg.json",
     "listen": 6688,
-    "dataFolder": "./data"
+    "dataFolder": "./data",
+    "azMdLoggerUrl": "https://...",
+    "azRRsiUrl": "https://..."
 }
 ```
 

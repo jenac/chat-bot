@@ -4,7 +4,6 @@ import { LastKnownGood } from './last-known-good';
 import { MongoRepository } from './mongo-repository';
 import { MessageStore } from './message-store';
 import { MessageSender } from './message-sender';
-import { AzureMdLogger } from './azure-md-logger';
 const Wechat = require('wechat4u');
 const qrcode = require('qrcode-terminal');
 
@@ -35,7 +34,6 @@ let lastKnownGood = new LastKnownGood(botConfig.lkgFile);
 
 var ClientClass = require('node-rest-client').Client;
 const client = new ClientClass();
-let azureMdLogger = new AzureMdLogger(botConfig.azMdLoggerUrl, client);
 
 try {
     bot = new Wechat(lastKnownGood.loadData());
@@ -92,7 +90,6 @@ bot.on('error', err => {
 
 bot.on('message', msg => {
     messageStore.persist(msg);
-    azureMdLogger.log(msg, (data, response) => {});
     logger.instance.info(msg);
 })
 

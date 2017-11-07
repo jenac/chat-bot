@@ -8,7 +8,6 @@ describe('bot config', () => {
         assert(botConfig.mongoServer != null && botConfig.mongoServer != undefined);
         assert(botConfig != null && botConfig.listen != undefined);
         assert(botConfig != null && botConfig.dataFolder != undefined);
-        assert(botConfig != null && botConfig.azMdLoggerUrl != undefined);
         assert(botConfig != null && botConfig.azRRsiUrl != undefined);
         
     })

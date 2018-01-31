@@ -18,7 +18,7 @@
     "qrcode-terminal": "^0.11.0",
     "request": "^2.81.0",
     "restify": "^5.0.1",
-    "wechat4u": "^0.7.5",
+    "wechat4u": "^0.7.6",
     "winston": "^2.3.1",
     "winston-daily-rotate-file": "^1.4.6"
   },
